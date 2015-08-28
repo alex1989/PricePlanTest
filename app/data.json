@@ -1,0 +1,12 @@
+[{
+    "name":"books",
+    "fields":[
+        {"name":"name", "type":"char"}
+    ]
+}, {
+    "name":"reader",
+    "fields":[
+        {"name":"name", "type":"char"},
+        {"name":"age", "type":"int"} 
+    ]
+}]
