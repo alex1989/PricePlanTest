@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 from .models import models
 from .db_scheme import scheme
 from datetime import date, datetime
+import json
 
 def filter_dict(dct, keys):
     return dict([(k, dct[k]) for k in keys if k in dct])
@@ -59,9 +60,9 @@ class ApiTestCase(ModelData):
             response = self.client.post(url, data, format='json')
             object_url = reverse('object', kwargs={'model_name': item['name'],
                                                    'pk': response.data['id']})
-            response = self.client.get(url, format='json')
+            response = self.client.get(object_url, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
-            fdata = filter_dict(dict(response.data[0]), data.keys())
+            fdata = filter_dict(dict(response.data), data.keys())
             self.assertEqual(fdata, data)
 
     def test_model_update(self):
@@ -71,11 +72,13 @@ class ApiTestCase(ModelData):
             response = self.client.post(url, data, format='json')
             object_url = reverse('object', kwargs={'model_name': item['name'],
                                                    'pk': response.data['id']})
+            response = self.client.get(object_url, format='json')
+            data = dict(response.data)
             for k in data:
                 if data[k] == '123':
                     data[k] == 'test'
-            response = self.client.post(url, data, format='json')
-            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            response = self.client.patch(object_url, json.dumps(data), format='json', content_type='application/json; charset=UTF-8')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
             fdata = filter_dict(dict(response.data), data.keys())
             self.assertEqual(fdata, data)
 
