@@ -76,9 +76,8 @@ class ApiTestCase(ModelData):
             data = dict(response.data)
             for k in data:
                 if data[k] == '123':
-                    data[k] == 'test'
+                    data[k] = 'test'
             response = self.client.patch(object_url, json.dumps(data), format='json', content_type='application/json; charset=UTF-8')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             fdata = filter_dict(dict(response.data), data.keys())
             self.assertEqual(fdata, data)
-
