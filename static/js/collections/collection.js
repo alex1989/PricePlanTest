@@ -1,7 +1,6 @@
-Collection = Backbone.Collection.extend({
+var Collection = Backbone.Collection.extend({
   tab: null,
   url: function() {
-    console.log('/api/' + this.tab + '/');
     return '/api/' + this.tab + '/';
   }
 });
